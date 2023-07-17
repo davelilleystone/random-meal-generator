@@ -2,6 +2,8 @@ const getMealButton = document.querySelector('.btn-meal');
 
 const url = 'https://www.themealdb.com/api/json/v1/1/random.php';
 
+// const url = 'https://www.themealdb.com/api/json/v1/1/lookup.php?i=52996';
+
 const getMealData = async () => {
   try {
     const response = await fetch(url);
@@ -36,11 +38,17 @@ const getIngredientMeasures = (meal) => {
 
 const createIngredientList = (ingredientNames, ingredientMeasures) => {
   const ingredients = [];
-  ingredientNames.forEach((item, index) =>
+  ingredientNames.forEach((item, index) => {
+    console.log(ingredientMeasures[index].length);
     ingredients.push(
-      `<li class = 'ingredient-list-item'>${item}  (${ingredientMeasures[index]})</li>`
-    )
-  );
+      `<li class = 'ingredient-list-item'>${item} ${
+        ingredientMeasures[index] != undefined &&
+        ingredientMeasures[index] != ' '
+          ? `(${ingredientMeasures[index]})`
+          : ''
+      }</li>`
+    );
+  });
   return ingredients.join('');
 };
 
@@ -62,6 +70,7 @@ const displayMeal = async () => {
       <img src="${meal.strMealThumb}" alt="${meal.strMeal}" />
     </div>
     <div class="ingredients">
+    <div class = ingredients-container>  
       <h2 class="meal-name">${meal.strMeal}</h2>
       <h3 class="ingredients-title">Ingredients</h3>
       <ul class="ingredients-list">${createIngredientList(
@@ -69,9 +78,12 @@ const displayMeal = async () => {
         ingredientMeasures
       )}</ul>
     </div>
+    </div>
   </section>
   <section class="instructions-details">
-  <div><h3>Cooking Instructions</h3><p>${meal.strInstructions}</p></div>
+  <div><h3 class="instructions-title">Cooking Instructions</h3><p>${
+    meal.strInstructions
+  }</p></div>
   </section>
     `;
 };
